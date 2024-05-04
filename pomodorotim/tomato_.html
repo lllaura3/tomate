@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🍅🍅🍅</title>
+  <link rel="icon" type="image/x-icon" href="tomaicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: silom, 'Courier New', Courier, monospace;
+      text-align: left;
+      padding: 10px;
+      transition: background-color 0.5s ease;
+      background-color: black;
+      color: rgba(255, 135, 231, 0.87);
+      
+    }
+    h1 {
+      margin-top: 0;
+      color: rgba(167, 0, 133, 0.87);
+    }
+    #timer {
+  font-size: 48px !important; /* Fixed font size */
+  padding: 8px 9px;
+  text-shadow: fuchsia;
+  background: radial-gradient(circle, rgba(2, 0, 36, 0.656) 15%, rgba(76, 9, 121, 0.493) 62%, rgba(224, 6, 28, 0.557) 100%);
+  border-radius: 50px;
+}
+    button {
+      font-family: monospace, 'Courier New', Courier; 
+      font-size: 16px !important;
+      padding: 8px 9px;
+      margin: 10px;
+      background-color: rgba(6, 44, 1, 0.433);
+      color: rgb(255, 181, 239);
+      border-radius: 50px;
+      border-color: rgba(220, 20, 200, 0.375);
+      border-left-color: crimson;
+    }
+    #break-duration {
+      width: 50px;
+      font-size: 16px;
+      text-align: center;
+      background: radial-gradient(circle, rgba(2, 0, 36, 0.656) 15%, rgba(76, 9, 121, 0.493) 62%, rgba(224, 6, 28, 0.557) 100%);
+      color: rgb(255, 255, 255);
+      border-radius: 50px;
+    }
+
+    @media (max-width: 480px) {
+      #timer {
+        font-size: 10px;
+      }
+      button, #break-duration {
+        font-size: 14px;
+        padding: 8px 6px;
+        border-radius: 50px;
+      }
+      button:hover {
+        color: rgb(0, 255, 0);
+        background-color: rgba(184, 19, 44, 0.406);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Timer</h1>
+  <div id="timer">25:00</div>
+  <button id="start-timer">start</button>
+  <button id="stop-timer">stop</button>
+ 
+  <br>
+  <input type="range" id="time-slider" min="1" max="60" value="25">
+<br>
+  Break: <input type="number" id="break-duration" value="5"> 
+  <button id="start-break">start</button>
+
+  <audio id="timer-sound">
+    <source src="applause-01.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // JavaScript code
+    const timerDisplay = document.getElementById('timer');
+    const startTimerButton = document.getElementById('start-timer');
+    const stopTimerButton = document.getElementById('stop-timer');
+    const breakDurationInput = document.getElementById('break-duration');
+    const startBreakButton = document.getElementById('start-break');
+    const body = document.querySelector('body');
+    const timerSound = document.getElementById('timer-sound');
+
+    let pomodoroTimer;
+    let breakTimer;
+    let isBreak = false;
+    let duration = 25 * 60; // 25 minutes in seconds
+
+    function updateTimer() {
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
+      timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      pomodoroTimer = setInterval(() => {
+        duration--;
+        updateTimer();
+        if (duration === 0) {
+          stopTimer();
+          playTimerSound();
+          invertBackground();
+          window.alert("🌴 CHILL TIME 💅");
+          startBreak();
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(pomodoroTimer);
+    }
+
+    function startBreak() {
+      isBreak = true;
+      duration = breakDurationInput.value * 60;
+      updateTimer();
+      breakTimer = setInterval(() => {
+        duration--;
+        updateTimer();
+        if (duration === 0) {
+          stopBreak();
+          playTimerSound();
+          invertBackground();
+          window.alert("👾 VAI TRABALHAR 👾");
+          startTimer();
+        }
+      }, 1000);
+    }
+
+    function stopBreak() {
+      clearInterval(breakTimer);
+      isBreak = false;
+      duration = 25 * 60;
+      updateTimer();
+      resetBackground();
+    }
+
+    function invertBackground() {
+      body.style.backgroundColor = 'red';
+      body.style.color = 'black';
+    }
+
+    function resetBackground() {
+      body.style.backgroundColor = 'black';
+      body.style.color = 'white';
+    }
+
+    function playTimerSound() {
+      timerSound.play();
+    }
+
+    
+    const timeSlider = document.getElementById('time-slider');
+    startTimerButton.addEventListener('click', function() {
+  stopBreak();
+  startTimer();
+});
+
+stopTimerButton.addEventListener('click', function() {
+  stopTimer();
+});
+
+
+
+startBreakButton.addEventListener('click', function() {
+  stopTimer();
+  startBreak();
+});
+timeSlider.addEventListener('input', function() {
+  duration = parseInt(timeSlider.value) * 60; // Convert minutes to seconds
+  updateTimer();
+});
+
+timeSlider.addEventListener('change', function() {
+  if (!isBreak) {
+    stopTimer();
+    startTimer();
+  } else {
+    stopBreak();
+    startBreak();
+  }
+});
+  </script>
+</body>
+</html>
