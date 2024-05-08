@@ -93,35 +93,10 @@ input[type="range"]::-moz-range-thumb {
         padding: 8px 6px;
         border-radius: 50px;
       }
-      
       button:hover {
         color: rgb(0, 255, 0);
         background-color: rgba(184, 19, 44, 0.406);
       }
-      [data-title]:hover:after {
-    opacity: 1;
-    transition: all 0.1s ease 0.5s;
-    visibility: visible;
-}
-[data-title]:after {
-    content: attr(data-title);
-    background-color: #00FF00;
-    color: #111;
-    font-size: 150%;
-    position: absolute;
-    padding: 1px 5px 2px 5px;
-    bottom: -1.6em;
-    left: 100%;
-    white-space: nowrap;
-    box-shadow: 1px 1px 3px #222222;
-    opacity: 0;
-    border: 1px solid #111111;
-    z-index: 99999;
-    visibility: hidden;
-}
-[data-title] {
-    position: relative;
-}
     @media (max-width: 480px) {
       #timer {
         font-size: 10px;
@@ -130,9 +105,6 @@ input[type="range"]::-moz-range-thumb {
       
     }
   </style>
-  
-   
-
 </head>
 <body>
   <h1>Timer</h1>
@@ -143,7 +115,7 @@ input[type="range"]::-moz-range-thumb {
   <button id="stop-timer" title="TIME WON'T STOP">stop</button>
  
   <br>
-  <input type="range" id="time-slider" min="1" max="60" value="25">
+  <input type="range" id="time-slider" title="set time" min="1" max="60" value="25">
 <br>
   Break: <input type="number" id="break-duration" value="5"> 
   <button id="start-break">start</button>
@@ -166,8 +138,6 @@ input[type="range"]::-moz-range-thumb {
     const breakSound = document.getElementById('break-sound');
     
     const randomMessages = ["👾 VAI TRABALHAR 👾", "travail", "bitch better have my money"];
-    
-    
 
     let pomodoroTimer;
     let breakTimer;
@@ -197,7 +167,6 @@ input[type="range"]::-moz-range-thumb {
 
 
 function startTimer() {
-  isBreak = false;
   pomodoroTimer = setInterval(() => {
     duration--;
     updateTimer();
@@ -231,12 +200,9 @@ function startTimer() {
     if (duration === 0) {
       stopBreak();
       playBreakSound();
-      
+      invertBackground();
       window.alert("🦾 WORK 🧠");
       /*window.alert(getRandomMessage()); // Display alert message after break time ends*/
-      resetBackground();
-      startTimer();
-      
     }
   }, 1000);
 }
@@ -253,7 +219,7 @@ function startTimer() {
 
     function invertBackground() {
       body.style.backgroundColor = 'red';
-      body.style.color = 'black' 
+      body.style.color = 'black'
     }
 
     function resetBackground() {
