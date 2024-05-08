@@ -7,16 +7,16 @@
   <style>
     body {
       font-family: silom, 'Courier New', Courier, monospace;
-      text-align: left;
+      text-align: center;
       padding: 10px;
       transition: background-color 0.5s ease;
       background-color: black;
-      color: rgba(255, 135, 231, 0.87);
+      color: rgb(0, 178, 65);
       
     }
     h1 {
       margin-top: 0;
-      color: rgba(167, 0, 133, 0.87);
+      
     }
     #timer {
   font-size: 48px !important; /* Fixed font size */
@@ -24,6 +24,50 @@
   text-shadow: fuchsia;
   background: radial-gradient(circle, rgba(2, 0, 36, 0.656) 15%, rgba(76, 9, 121, 0.493) 62%, rgba(224, 6, 28, 0.557) 100%);
   border-radius: 50px;
+  }
+#time-bar {
+  height:10px;
+  background: linear-gradient(90deg, rgba(137, 226, 255, 0.916) 15%, rgba(163, 25, 255, 0.878) 62%, rgb(243, 255, 74) 100%);
+  /*background: linear-gradient(0deg, rgba(255, 255, 255, 0.806) 15%, rgba(163, 25, 255, 0.878) 62%, rgba(25, 0, 251, 0.557) 100%);
+ linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,0,0,1) 52%, rgba(0,0,0,1) 100%);*/
+  transition: width 1s linear;
+  width: 100%; /* Full width initially */
+  border-radius: 50px;
+}
+#time-slider {
+  height: 6px;
+  width: 70%;
+  border-radius: 50px;
+  outline-width: thick;
+  outline-color: chocolate;
+  background-color: rgba(13, 149, 151, 0.598);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  height: 15px;
+  width: 15px;
+  background-color: crimson;
+  border-radius: 50%;
+  border: none;
+
+  /* box-shadow: -407px 0 0 400px #f50; emove this line */
+  transition: .2s ease-in-out;
+}
+
+/* Thumb: Firefox */
+input[type="range"]::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  background-color: crimson;
+  border-radius: 50%;
+  border: none;
+  
+  /* box-shadow: -407px 0 0 400px #f50; emove this line */
+  transition: .2s ease-in-out;
 }
     button {
       font-family: monospace, 'Courier New', Courier; 
@@ -31,7 +75,7 @@
       padding: 8px 9px;
       margin: 10px;
       background-color: rgba(6, 44, 1, 0.433);
-      color: rgb(255, 181, 239);
+      color: rgb(122, 0, 95);
       border-radius: 50px;
       border-color: rgba(220, 20, 200, 0.375);
       border-left-color: crimson;
@@ -44,28 +88,59 @@
       color: rgb(255, 255, 255);
       border-radius: 50px;
     }
-
-    @media (max-width: 480px) {
-      #timer {
-        font-size: 10px;
-      }
-      button, #break-duration {
+  button, #break-duration {
         font-size: 14px;
         padding: 8px 6px;
         border-radius: 50px;
       }
+      
       button:hover {
         color: rgb(0, 255, 0);
         background-color: rgba(184, 19, 44, 0.406);
       }
+      [data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+[data-title]:after {
+    content: attr(data-title);
+    background-color: #00FF00;
+    color: #111;
+    font-size: 150%;
+    position: absolute;
+    padding: 1px 5px 2px 5px;
+    bottom: -1.6em;
+    left: 100%;
+    white-space: nowrap;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    border: 1px solid #111111;
+    z-index: 99999;
+    visibility: hidden;
+}
+[data-title] {
+    position: relative;
+}
+    @media (max-width: 480px) {
+      #timer {
+        font-size: 10px;
+      }
+    
+      
     }
   </style>
+  
+   
+
 </head>
 <body>
   <h1>Timer</h1>
+  <div id="time-bar"></div>
+  <br>
   <div id="timer">25:00</div>
-  <button id="start-timer">start</button>
-  <button id="stop-timer">stop</button>
+  <button id="start-timer" title="press me">start</button>
+  <button id="stop-timer" title="TIME WON'T STOP">stop</button>
  
   <br>
   <input type="range" id="time-slider" min="1" max="60" value="25">
@@ -76,7 +151,9 @@
   <audio id="timer-sound">
     <source src="applause-01.mp3" type="audio/mpeg">
   </audio>
-
+<audio id="break-sound">
+    <source src="button-11.mp3" type="audio/mpeg">
+  </audio>
   <script>
     // JavaScript code
     const timerDisplay = document.getElementById('timer');
@@ -86,6 +163,11 @@
     const startBreakButton = document.getElementById('start-break');
     const body = document.querySelector('body');
     const timerSound = document.getElementById('timer-sound');
+    const breakSound = document.getElementById('break-sound');
+    
+    const randomMessages = ["👾 VAI TRABALHAR 👾", "travail", "bitch better have my money"];
+    
+    
 
     let pomodoroTimer;
     let breakTimer;
@@ -97,41 +179,69 @@
       const seconds = duration % 60;
       timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
+    function updateTimerBar() {
+  let totalTime;
+  if (isBreak) {
+    totalTime = breakDurationInput.value * 60; // Total break time in seconds
+  } else {
+    totalTime = parseInt(timeSlider.value) * 60; // Total timer time in seconds
+  }
+  const remainingTime = duration; // Remaining time in seconds
+  const remainingPercentage = (remainingTime / totalTime) * 100; // Calculate remaining time percentage
+  document.getElementById('time-bar').style.transition = 'width 1s linear'; // Set a fixed transition duration
+  document.getElementById('time-bar').style.width = `${remainingPercentage}%`;
+}
 
-    function startTimer() {
-      pomodoroTimer = setInterval(() => {
-        duration--;
-        updateTimer();
-        if (duration === 0) {
-          stopTimer();
-          playTimerSound();
-          invertBackground();
-          window.alert("🌴 CHILL TIME 💅");
-          startBreak();
-        }
-      }, 1000);
+
+
+
+
+function startTimer() {
+  isBreak = false;
+  pomodoroTimer = setInterval(() => {
+    duration--;
+    updateTimer();
+    updateTimerBar();
+    if (duration === 0) {
+      stopTimer();
+      playTimerSound();
+      invertBackground();
+      window.alert("🌴 CHILL TIME 💅");
+      startBreak();
+     
     }
+  }, 1000);
+}
+
 
     function stopTimer() {
       clearInterval(pomodoroTimer);
+        clearInterval(breakTimer);
     }
 
     function startBreak() {
-      isBreak = true;
-      duration = breakDurationInput.value * 60;
-      updateTimer();
-      breakTimer = setInterval(() => {
-        duration--;
-        updateTimer();
-        if (duration === 0) {
-          stopBreak();
-          playTimerSound();
-          invertBackground();
-          window.alert("👾 VAI TRABALHAR 👾");
-          startTimer();
-        }
-      }, 1000);
+  isBreak = true;
+  duration = breakDurationInput.value * 60;
+  updateTimer();
+  /*document.getElementById('time-bar').style.opacity = 1; // Reset opacity to 1 before starting the break*/
+  breakTimer = setInterval(() => {
+    duration--;
+    updateTimer();
+    updateTimerBar();
+    if (duration === 0) {
+      stopBreak();
+      playBreakSound();
+      
+      window.alert("🦾 WORK 🧠");
+      /*window.alert(getRandomMessage()); // Display alert message after break time ends*/
+      resetBackground();
+      startTimer();
+      
     }
+  }, 1000);
+}
+
+
 
     function stopBreak() {
       clearInterval(breakTimer);
@@ -143,7 +253,7 @@
 
     function invertBackground() {
       body.style.backgroundColor = 'red';
-      body.style.color = 'black';
+      body.style.color = 'black' 
     }
 
     function resetBackground() {
@@ -154,7 +264,9 @@
     function playTimerSound() {
       timerSound.play();
     }
-
+  function playBreakSound() {
+      breakSound.play();
+    }
     
     const timeSlider = document.getElementById('time-slider');
     startTimerButton.addEventListener('click', function() {
