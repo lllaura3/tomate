@@ -25,11 +25,23 @@
       align-items: center;
       height: 100vh;
     }
+
+    #picture-in-picture-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div id="countdown"></div>
+    <button id="picture-in-picture-btn">Enter Picture-in-Picture</button>
   </div>
 
   <script>
@@ -61,6 +73,16 @@
         document.getElementById("countdown").innerHTML = "Countdown has ended!";
       }
     }, 1000);
+
+    // Add event listener to the picture-in-picture button
+    var pictureInPictureBtn = document.getElementById("picture-in-picture-btn");
+    pictureInPictureBtn.addEventListener("click", function() {
+      if (!document.pictureInPictureElement) {
+        document.body.requestPictureInPicture();
+      } else {
+        document.exitPictureInPicture();
+      }
+    });
   </script>
 </body>
 </html>
