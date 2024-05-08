@@ -4,18 +4,31 @@
   <title>Countdown Timer</title>
   <style>
     body {
-      background: linear-gradient(to right, #6b6b6b, #2c2c2c);
+     
+ background: radial-gradient(circle, rgba(2, 0, 36, 0.656) 15%, rgba(76, 9, 121, 0.493) 62%, rgba(224, 6, 28, 0.557) 100%);
+     
+      
       font-family: silom;
-      color: white;
-      margin: 0;
-      padding: 0;
-    }
+      -webkit-text-stroke-width: 1px;
+-webkit-text-stroke-color: rgba(249, 255, 244, 0);
 
+      margin: 0;
+   
+      align-items: center;
+     
+      height: 100vh;
+    }
     #countdown {
-      font-size: 48px;
+      font-size: 53px;
       font-weight: bold;
       text-align: center;
       margin-top: 50px;
+      background: -moz-linear-gradient(-45deg, rgb(252, 245, 50) 0%, rgba(252,50,50,1) 29%, rgba(252,47,126,1) 43%, rgba(252,47,126,1) 68%, rgba(252,40,96,1) 73%, rgba(232,0,123,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, rgba(252,238,50,1) 0%,rgba(252,50,50,1) 29%,rgba(252,47,126,1) 43%,rgba(252,47,126,1) 68%,rgba(252,40,96,1) 73%,rgba(232,0,123,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, rgba(252,238,50,1) 0%,rgba(252,50,50,1) 29%,rgba(252,47,126,1) 43%,rgba(252,47,126,1) 68%,rgba(252,40,96,1) 73%,rgba(232,0,123,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#555555, endColorstr=#666666);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
     }
 
     .container {
