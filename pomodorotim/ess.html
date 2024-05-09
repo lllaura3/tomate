@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🌱🌿🌳🌵</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+        
+      font-family: silom, 'Courier New', Courier, monospace;
+      text-align: center;
+      margin: 0;
+      padding:  10%;
+      align-items: center;
+  
+      height: 100vh;
+      transition: background-color 10s ease;
+      background: linear-gradient(0deg, rgba(16, 109, 0, 0.916) 15%, rgba(23, 0, 170, 0.878) 62%, rgb(2, 117, 54) 100%);
+      color: rgb(197, 4, 4);
+      -webkit-text-stroke-width: 1px;
+-webkit-text-stroke-color: rgb(255, 255, 255);
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #timer {
+  font-size: 48px !important; /* Fixed font size */
+  padding: 8px 9px;
+  text-shadow: fuchsia;
+  background: radial-gradient(circle, rgba(79, 0, 0, 0.656) 15%, rgba(76, 9, 121, 0) 62%, rgba(0, 99, 40, 0) 100%);
+  border-radius: 50px;
+  }
+#time-bar {
+  height:10px;
+  background: linear-gradient(90deg, rgb(163, 73, 0) 15%, rgba(255, 132, 25, 0.878) 62%, rgb(243, 255, 74) 100%);
+  /*background: linear-gradient(0deg, rgba(255, 255, 255, 0.806) 15%, rgba(163, 25, 255, 0.878) 62%, rgba(25, 0, 251, 0.557) 100%);
+ linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,0,0,1) 52%, rgba(0,0,0,1) 100%);*/
+  transition: width 1s linear;
+  width: 100%; /* Full width initially */
+  border-radius: 50px;
+}
+#time-slider {
+  height: 6px;
+  width: 70%;
+  border-radius: 50px;
+  outline-width: thick;
+  outline-color: chocolate;
+  background-color: rgba(13, 149, 151, 0.598);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  height: 15px;
+  width: 15px;
+  background-color: crimson;
+  border-radius: 50%;
+  border: none;
+
+  /* box-shadow: -407px 0 0 400px #f50; emove this line */
+  transition: .2s ease-in-out;
+}
+
+/* Thumb: Firefox */
+input[type="range"]::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  background-color: crimson;
+  border-radius: 50%;
+  border: none;
+  
+  /* box-shadow: -407px 0 0 400px #f50; emove this line */
+  transition: .2s ease-in-out;
+}
+    button {
+      font-family: monospace, 'Courier New', Courier; 
+      font-size: 16px !important;
+      padding: 8px 9px;
+      margin: 10px;
+      background-color: rgba(6, 44, 1, 0.433);
+      color: rgb(122, 0, 95);
+      border-radius: 50px;
+      border-color: rgba(220, 20, 200, 0.375);
+      border-left-color: crimson;
+    }
+   
+      button:hover {
+        color: rgb(0, 255, 0);
+        background-color: rgba(184, 19, 44, 0.406);
+      }
+     
+    @media (max-width: 480px) {
+      #timer {
+        font-size: 10px;
+      }
+    
+      
+    }
+  </style>
+</head>
+<body>
+  <h1>@</h1>
+  <div id="time-bar"></div>
+  <br>
+  <div id="timer">25:00</div>
+  <button id="start-timer" title="press me">start</button>
+ 
+  <br>
+  <input type="range" id="time-slider" title="set time here" min="1" max="160" value="25">
+<br>
+
+  
+<audio id="timer-sound">
+    <source src="button-11.mp3" type="audio/mpeg">
+  </audio>
+  <script>
+    // JavaScript code
+    const timerDisplay = document.getElementById('timer');
+    const startTimerButton = document.getElementById('start-timer');
+    const stopTimerButton = document.getElementById('stop-timer');
+   
+    const body = document.querySelector('body');
+    const timerSound = document.getElementById('timer-sound');
+    
+
+    let pomodoroTimer;
+    let duration = 25 * 60; // 25 minutes in seconds
+
+    function updateTimer() {
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
+      timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    function updateTimerBar() {
+  let totalTime;
+  
+    totalTime = parseInt(timeSlider.value) * 60; // Total timer time in seconds
+  
+  const remainingTime = duration; // Remaining time in seconds
+  const remainingPercentage = (remainingTime / totalTime) * 100; // Calculate remaining time percentage
+  document.getElementById('time-bar').style.transition = 'width 1s linear'; // Set a fixed transition duration
+  document.getElementById('time-bar').style.width = `${remainingPercentage}%`;
+}
+
+
+
+
+
+function startTimer() {
+  pomodoroTimer = setInterval(() => {
+    duration--;
+    updateTimer();
+    updateTimerBar();
+    if (duration === 0) {
+      
+      playTimerSound();
+      invertBackground();
+      window.alert("EEEESSSSS");
+      stopTimer();
+    }
+  }, 1000);
+}
+
+
+    function stopTimer() {
+      clearInterval(pomodoroTimer);
+        clearInterval(breakTimer);
+    }
+
+
+
+    function invertBackground() {
+      body.style.background = 'red';
+      body.style.color = 'black'
+    }
+
+  function playTimerSound() {
+      timerSound.play();
+    }
+    
+    const timeSlider = document.getElementById('time-slider');
+    startTimerButton.addEventListener('click', function() {
+
+  startTimer();
+});
+
+stopTimerButton.addEventListener('click', function() {
+  stopTimer();
+});
+
+
+
+timeSlider.addEventListener('input', function() {
+  duration = parseInt(timeSlider.value) * 60; // Convert minutes to seconds
+  updateTimer();
+});
+
+timeSlider.addEventListener('change', function() {
+    stopTimer();
+    startTimer();
+  }
+);
+  </script>
+</body>
+</html>
