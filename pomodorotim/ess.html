@@ -104,14 +104,18 @@ input[type="range"]::-moz-range-thumb {
   </style>
 </head>
 <body>
-  <h1></h1>
+  <h1>@</h1>
   <div id="time-bar"></div>
   <br>
   <div id="timer">25:00</div>
   <button id="start-timer" title="press me">start</button>
+  <button id="stop-timer">stop</button>
  
   <br>
-  <input type="range" id="time-slider" title="set time here" min="1" max="160" value="25">
+ 
+  <br>
+  <input type="range" id="time-slider" title="set time here" min="1" max="150" value="150">
+
 <br>
 
   
@@ -129,23 +133,25 @@ input[type="range"]::-moz-range-thumb {
     
 
     let pomodoroTimer;
-    let duration = 25 * 60; // 25 minutes in seconds
+    let duration = 150 * 60; // 25 minutes in seconds
 
     function updateTimer() {
-      const minutes = Math.floor(duration / 60);
-      const seconds = duration % 60;
-      timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-    function updateTimerBar() {
-  let totalTime;
-  
-    totalTime = parseInt(timeSlider.value) * 60; // Total timer time in seconds
-  
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration % 3600) / 60);
+  const seconds = duration % 60;
+  timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+
+
+function updateTimerBar() {
+  let totalTime = parseInt(timeSlider.value) * 60; // Total timer time in seconds
   const remainingTime = duration; // Remaining time in seconds
   const remainingPercentage = (remainingTime / totalTime) * 100; // Calculate remaining time percentage
   document.getElementById('time-bar').style.transition = 'width 1s linear'; // Set a fixed transition duration
   document.getElementById('time-bar').style.width = `${remainingPercentage}%`;
 }
+
 
 
 
