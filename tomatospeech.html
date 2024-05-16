@@ -118,7 +118,7 @@ input[type="range"]::-moz-range-thumb {
   <h1>Timer</h1>
   <div id="time-bar"></div>
   <br>
-  <div id="timer">25:00</div>
+  <div id="timer">10:00</div>
   <button id="start-timer" title="press me">start</button>
   <button id="stop-timer" title="TIME WON'T STOP">stop</button>
   <br>
@@ -169,7 +169,7 @@ input[type="range"]::-moz-range-thumb {
     let pomodoroTimer;
     let breakTimer;
     let isBreak = false;
-    let duration = 25 * 60; // 25 minutes in seconds
+    let duration = 10 * 60; // 10 minutes in seconds
 
     function updateTimer() {
       const minutes = Math.floor(duration / 60);
@@ -262,7 +262,7 @@ input[type="range"]::-moz-range-thumb {
     function stopBreak() {
       clearInterval(breakTimer);
       isBreak = false;
-      duration = 25 * 60;
+      duration = 10 * 60;
       updateTimer();
       resetBackground();
     }
