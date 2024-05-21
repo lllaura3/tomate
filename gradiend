@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>☂️Countdown Timer☂️</title>
+  <style>
+  
+  body {
+     
+     background: radial-gradient(circle, rgba(2, 0, 36, 0.656) 15%, rgba(76, 9, 121, 0.493) 62%, rgba(224, 6, 28, 0.557) 100%);
+         
+          
+          font-family: silom;
+          -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: rgba(249, 255, 244, 0);
+    
+          margin: 0;
+       
+          align-items: center;
+         
+          height: 100vh;
+        }
+        #countdown {
+          font-size: 53px;
+          font-weight: bold;
+          text-align: center;
+          margin-top: 50px;
+          background: -moz-linear-gradient(-45deg, rgb(252, 245, 50) 0%, rgba(252,50,50,1) 29%, rgba(252,47,126,1) 43%, rgba(252,47,126,1) 68%, rgba(252,40,96,1) 73%, rgba(232,0,123,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, rgba(252,238,50,1) 0%,rgba(252,50,50,1) 29%,rgba(252,47,126,1) 43%,rgba(252,47,126,1) 68%,rgba(252,40,96,1) 73%,rgba(232,0,123,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, rgba(252,238,50,1) 0%,rgba(252,50,50,1) 29%,rgba(252,47,126,1) 43%,rgba(252,47,126,1) 68%,rgba(252,40,96,1) 73%,rgba(232,0,123,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#555555, endColorstr=#666666);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+        }
+    
+        .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .input-container {
+      margin-bottom: 20px;
+    }
+
+    .input-container label {
+      margin-right: 10px;
+    }
+
+    .input-container input {
+      padding: 5px;
+      font-size: 16px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="input-container" id="input-container">
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date">
+      <label for="time">Time:</label>
+      <input type="time" id="time" name="time">
+      <button onclick="startCountdown()">Start Countdown</button>
+    </div>
+    <div id="countdown"></div>
+  </div>
+
+  <script>
+    function startCountdown() {
+      var dateInput = document.getElementById("date").value;
+      var timeInput = document.getElementById("time").value;
+
+      // Combine the date and time inputs
+      var countDownDate = new Date(dateInput + " " + timeInput).getTime();
+
+      // Hide the input container
+      document.getElementById("input-container").classList.add("hidden");
+
+      // Update the count down every 1 second
+      var x = setInterval(function() {
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="countdown"
+        document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
+        + minutes + "m " + seconds + "s ";
+
+        // If the count down is over, write some text
+        if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("countdown").innerHTML = "Countdown has ended!";
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
